@@ -11,3 +11,5 @@ theme. In neither case will the theme be a direct copy or clone of the UI that i
 Metric compatibility with existing GNUstep applications is not a priority; since any given app will need
 changes to fit into Agora anyway, adjusting the UI theme to use the new look is also going to be a given.
 There aren't that many GNUstep applications anyway, so it's not that important to us.
+
+Both themes will share a single icon set, most likely derived from an existing one from GNOME.
