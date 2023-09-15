@@ -13,7 +13,7 @@
 	GSBrowserVerticalPadding = 0;
 	GSMenuBarHeight = 22;
 	GSMenuItemHeight = 20;
-	GSMenuSeparatorHeight = 7;
+	GSMenuSeparatorHeight = 3;
 	GSMenuSubmenuHorizontalOverlap = 1;
 	GSMenuSubmenuVerticalOverlap = 0;
 	GSScrollViewNoInnerBorder = YES;
@@ -21,7 +21,7 @@
 	GSScrollViewUseBottomCorner = NO;
 	GSScrollerArrowsSameEnd = NO;
 	GSScrollerButtonsOffset = 0;
-	GSScrollerDefaultWidth = "16.0";
+	GSScrollerDefaultWidth = "13.0";
 	GSScrollerKnobOvershoot = "1.0";
 	GSScrollerScrollsByPage = YES;
 	NSMenuInterfaceStyle = NSMacintoshInterfaceStyle;
