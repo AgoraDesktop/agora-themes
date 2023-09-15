@@ -1,0 +1,15 @@
+{
+    "fsn_info_type" = <*I0>;
+    geometry = "529 48 720 954 0 0  1920 1058 ";
+    iconposition = <*I5>;
+    iconsize = <*I48>;
+    labeltxtsize = <*I12>;
+    lastselection = (
+	"/Users/kyle/Library/Themes/Argentum.theme/Resources/ThemeTiles/GSMenuSeparatorItem.9.png"
+    );
+    shelfdicts = (
+    );
+    shelfheight = <*R2>;
+    singlenode = <*BN>;
+    viewtype = Browser;
+}
