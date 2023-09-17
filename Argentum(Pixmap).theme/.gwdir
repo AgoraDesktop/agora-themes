@@ -1,11 +1,11 @@
 {
     "fsn_info_type" = <*I0>;
-    geometry = "529 48 720 954 0 0  1920 1058 ";
+    geometry = "618 416 720 562 0 0  1920 1058 ";
     iconposition = <*I5>;
     iconsize = <*I48>;
     labeltxtsize = <*I12>;
     lastselection = (
-	"/Users/kyle/Library/Themes/Argentum.theme/Resources/ThemeTiles/GSMenuSeparatorItem.9.png"
+	"/Users/kyle/Development/Agora/agora-themes/Argentum.theme/Resources/ThemeImages/common_SystemMenu.png"
     );
     shelfdicts = (
     );
