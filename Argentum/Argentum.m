@@ -25,9 +25,15 @@
    Boston, MA 02110-1301, USA.
 */ 
 
-#import "ArgentumTheme.h"
+#import "Argentum.h"
 
-void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
+
+#define APP_MENU_ORIGIN_X_OFFSET 43
+#define APP_MENU_WIDTH_OFFSET 288
+
+
+__attribute__((used))
+static void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
         Method originalMethod = class_getInstanceMethod(class, originalSelector);
         Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
 
@@ -38,7 +44,13 @@ void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
         class_replaceMethod(class, originalSelector, swizzledImp, method_getTypeEncoding(swizzledMethod));
 }
 
-@implementation ArgentumTheme
+@implementation Argentum
+
++ (void) load {
+	//swizzle(NSMenu.class, @selector(_setGeometry), @selector(AGTSetGeometry));
+	//swizzle(NSMenu.class, @selector(sizeToFit), @selector(AGTSizeToFit));
+	//swizzle(NSMenu.class, @selector(_organizeMenu), @selector(AGTOrganizeMenu));
+}
 
 - (BOOL) menuShouldShowIcon
 {
@@ -66,11 +78,34 @@ void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
 	}
 }
 
-- (void) drawTitleForMenuItemCell: (NSMenuItemCell *) cell
-                        withFrame: (NSRect) cellFrame
-                           inView: (NSView *) controlView
-                            state: (GSThemeControlState) state
-                     isHorizontal: (BOOL) isHorizontal
+- (NSRect) modifyRect: (NSRect)aRect
+	   forMenu: (NSMenu *)aMenu
+	   isHorizontal: (BOOL) horizontal;
+{
+	if (horizontal) {
+		aRect.origin.x += APP_MENU_ORIGIN_X_OFFSET;
+		aRect.size.width -= (APP_MENU_WIDTH_OFFSET + APP_MENU_ORIGIN_X_OFFSET);
+	}
+
+	return aRect;
+}
+
+- (float) titleWidthForMenuView: (NSMenuView *)aMenuView
+		  proposedWidth: (float)proposedWidth {
+	return proposedWidth + 4;
+}
+
+
+- (NSString *) keyForKeyEquivalent: (NSString *)aString
+{
+	return aString.uppercaseString;
+}
+
+- (void) drawTitleForMenuItemCell: (NSMenuItemCell *)cell
+                        withFrame: (NSRect)cellFrame
+                           inView: (NSView *)controlView
+                            state: (GSThemeControlState)state
+                     isHorizontal: (BOOL)isHorizontal
 {
 
 // In the case of an app menu, that is, a menu item in a horizontal menu
@@ -81,26 +116,36 @@ void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
 
 	NSString *menuTitle = cell.menuItem.title;
 	NSString *appTitle = [NSBundle.mainBundle.localizedInfoDictionary objectForKey: @"ApplicationName"];
-
-  	NSMutableString *mutableAppTitle = [NSMutableString stringWithCapacity: appTitle.length + 5];
-
-	[mutableAppTitle appendString: appTitle];
-	[mutableAppTitle appendString: @"   "];
+	NSString *paddedAppTitle = [appTitle stringByAppendingString: @"   "];
 
 	NSMutableDictionary *attrs = NSMutableDictionary.dictionary;
 
 	attrs[NSFontAttributeName] = [NSFont boldSystemFontOfSize: 0.0];
 
-	NSAttributedString *boldTitle = [[NSAttributedString alloc] initWithString: mutableAppTitle
+	NSAttributedString *boldTitle = [[NSAttributedString alloc] initWithString: paddedAppTitle
 									attributes: attrs];
 
-	if (isHorizontal == YES && [menuTitle isEqualToString: mutableAppTitle]) {
+	if (isHorizontal == YES && [menuTitle isEqualToString: paddedAppTitle]) {
+		NSRect frame = [cell titleRectForBounds: cellFrame];
+		frame.size.width += 10;
 		[cell _drawAttributedText: boldTitle
-				  inFrame: [cell titleRectForBounds: cellFrame]];
+				  inFrame: frame];
 
 	} else {
 		[cell _drawText: [[cell menuItem] title]
 		inFrame: [cell titleRectForBounds: cellFrame]];
+	}
+}
+
+- (NSString *) proposedTitle: (NSString *)title
+		 forMenuItem: (NSMenuItem *)menuItem
+{
+ 	NSString *appTitle = [NSBundle.mainBundle.localizedInfoDictionary objectForKey: @"ApplicationName"];
+	
+	if ([title isEqualToString: appTitle]) {
+		return [title stringByAppendingString: @"   "];
+	} else {
+		return title;
 	}
 }
 

@@ -1,0 +1,125 @@
+{
+    GSThemeAuthors = (
+	"Kyle J Cardoza"
+    );
+    GSThemeDetails = "Argentum theme for Agora Desktop";
+    GSThemeDomain = {
+	GSBackHandlesWindowDecorations = YES;
+	GSBrowserColumnSeparation = 0;
+	GSBrowserUseBezels = NO;
+	GSBrowserVerticalPadding = 0;
+	GSMenuBarHeight = 22;
+	GSMenuItemHeight = 20;
+	GSMenuSeparatorHeight = 3;
+	GSMenuSubmenuHorizontalOverlap = 1;
+	GSMenuSubmenuVerticalOverlap = 1;
+	GSScrollViewNoInnerBorder = YES;
+	GSScrollViewScrollersOverlapBorders = YES;
+	GSScrollViewUseBottomCorner = NO;
+	GSScrollerArrowsSameEnd = NO;
+	GSScrollerButtonsOffset = 0;
+	GSScrollerDefaultWidth = "13.0";
+	GSScrollerKnobOvershoot = "1.0";
+	GSScrollerScrollsByPage = YES;
+	NSMenuInterfaceStyle = NSMacintoshInterfaceStyle;
+    };
+    GSThemeIcon = "ArgentumTheme.png";
+    GSThemeLicense = "GNU LGPL";
+    GSThemePreview = "Argentum_preview_128.tiff";
+    GSThemeTiles = {
+	GSButton = {
+	    FileName = "NSButton.9.png";
+	};
+	GSButtonSelected = {
+	    FileName = "NSButtonSelected.9.png";
+	};
+	GSColorWell = {
+	    FileName = "NSButton.9.png";
+	};
+	GSColorWellHighlighted = {
+	    FileName = "NSButtonHighlighted.9.png";
+	};
+	GSColorWellInnerBorder = {
+	    FileName = "NSBezelBorder.9.png";
+	};
+	GSMenuCloseButton = {
+	    FileName = "Blank.9.png";
+	};
+	GSMenuHorizontalItem = {
+	    FileName = "Blank.9.png";
+	};
+	GSMenuHorizontalItemHighlighted = {
+	    FileName = "GSMenuHorizontalItemHighlighted.9.png";
+	};
+	GSMenuHorizontalItemSelected = {
+	    FileName = "GSMenuHorizontalItemHighlighted.9.png";
+	};
+	GSMenuVerticalItem = {
+	    FileName = "Blank.9.png";
+	};
+	GSMenuVerticalItemDisabled = {
+	    FileName = "Blank.9.png";
+	};
+	GSMenuVerticalItemSelected = {
+	    FileName = "Blank.9.png";
+	};
+	GSWindowBackground = {
+	    FileName = "WindowBackground.png";
+	    HorizontalDivision = 20;
+	    VerticalDivision = 20;
+	};
+	GSWindowBackgroundSelected = {
+	    FileName = "WindowBackgroundSelected.png";
+	    FillStyle = ScaleAll;
+	    HorizontalDivision = 20;
+	    VerticalDivision = 20;
+	};
+	GSWindowResizeBar = {
+	    FileName = "WindowResize.9.png";
+	};
+	GSWindowTitleBar = {
+	    FileName = "Titlebar.9.png";
+	};
+	NSSegmentStyleTexturedSquare = {
+	    FileName = "SegmentedCell-unselected.9.png";
+	};
+	NSSegmentStyleTexturedSquareRoundedLeft = {
+	    FileName = "SegmentedCellRoundedLeft-unselected.9.png";
+	};
+	NSSegmentStyleTexturedSquareRoundedLeftRoundedRight = {
+	    FileName = "SegmentedCell-unselected.9.png";
+	};
+	NSSegmentStyleTexturedSquareRoundedLeftRoundedRightSelected = {
+	    FileName = "SegmentedCell-selected.9.png";
+	};
+	NSSegmentStyleTexturedSquareRoundedLeftSelected = {
+	    FileName = "SegmentedCellRoundedLeft-selected.9.png";
+	};
+	NSSegmentStyleTexturedSquareRoundedRight = {
+	    FileName = "SegmentedCell-unselected.9.png";
+	};
+	NSSegmentStyleTexturedSquareRoundedRightSelected = {
+	    FileName = "SegmentedCell-selected.9.png";
+	};
+	NSSegmentStyleTexturedSquareSelected = {
+	    FileName = "SegmentedCell-selected.9.png";
+	};
+	NSTextFieldRoundedBezel = {
+	    FileName = "NSBezelBorder.9.png";
+	};
+	NSTextFieldSquareBezel = {
+	    FileName = "NSBezelBorder.9.png";
+	};
+	NSTexturedSquareBezelStyle = {
+	    FileName = "NSShadowlessSquareBezelStyle.9.png";
+	};
+	NSTexturedSquareBezelStyleSelected = {
+	    FileName = "NSShadowlessSquareBezelStyleHighlighted.9.png";
+	};
+    };
+    GSThemeVersion = "0.1";
+    NOTE = "Automatically generated, do not edit!";
+    NSExecutable = Argentum;
+    NSMainNibFile = "";
+    NSPrincipalClass = ArgentumTheme;
+}

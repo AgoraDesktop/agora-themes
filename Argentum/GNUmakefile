@@ -45,10 +45,7 @@ Argentum_PRINCIPAL_CLASS = ArgentumTheme
 ADDITIONAL_OBJC_LIBS=
 
 Argentum_OBJC_FILES = \
-		ArgentumTheme.m \
-		NSMenu+ArgentumTheme.m \
-		NSMenuItemCell+ArgentumTheme.m \
-		NSMenuView+ArgentumTheme.m
+		Argentum.m
 #
 # Resource files
 #
@@ -56,7 +53,10 @@ Argentum_RESOURCE_FILES = \
 		Resources/ArgentumTheme.png \
 		Resources/Argentum_preview_128.tiff \
 		Resources/ThemeImages \
-		Resources/ThemeTiles
+		Resources/ThemeTiles \
+		Resources/ThemeColors.clr \
+		Resources/ThemeExtraColors.clr \
+		Resources/ThemeExtraHighlightedColors.clr
 
 -include GNUmakefile.preamble
 

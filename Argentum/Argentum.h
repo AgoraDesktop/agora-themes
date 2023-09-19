@@ -28,8 +28,6 @@
 #import <AppKit/AppKit.h>
 #import <GNUstepGUI/GSTheme.h>
 
-void swizzle(Class class, SEL originalSelector, SEL swizzledSelector);
-
-@interface ArgentumTheme: GSTheme {}
+@interface Argentum: GSTheme {}
 
 @end
