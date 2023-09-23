@@ -1,7 +1,7 @@
 {
 	NSExecutable = "Argentum";
 	NSMainNibFile = "";
-	NSPrincipalClass = "ArgentumTheme";
+	NSPrincipalClass = "Argentum";
 	GSThemeAuthors = (
 		"Kyle J Cardoza"
 	);
@@ -9,7 +9,7 @@
 	GSThemeIcon = ArgentumTheme.png;
 	GSThemePreview = Argentum_preview_128.tiff;
 	GSThemeDomain = {
-		GSBackHandlesWindowDecorations = YES;
+		GSBackHandlesWindowDecorations = NO;
 		GSBrowserColumnSeparation = 0;
 		GSBrowserUseBezels = NO;
 		GSBrowserVerticalPadding = 0;
@@ -81,6 +81,7 @@
 		};
 		GSWindowTitleBar = {
 			FileName = "Titlebar.9.png";
+			FillStyle = Center;
 		};
 		NSSegmentStyleTexturedSquare = {
 			FileName = "SegmentedCell-unselected.9.png";

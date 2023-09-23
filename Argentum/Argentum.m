@@ -26,6 +26,7 @@
 */ 
 
 #import "Argentum.h"
+#import "ArgentumWindowDecorator.h"
 
 
 #define APP_MENU_ORIGIN_X_OFFSET 43
@@ -46,10 +47,8 @@ static void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
 
 @implementation Argentum
 
-+ (void) load {
-	//swizzle(NSMenu.class, @selector(_setGeometry), @selector(AGTSetGeometry));
-	//swizzle(NSMenu.class, @selector(sizeToFit), @selector(AGTSizeToFit));
-	//swizzle(NSMenu.class, @selector(_organizeMenu), @selector(AGTOrganizeMenu));
+- (id<GSWindowDecorator>) windowDecorator {
+	return ArgentumWindowDecorationView.self;
 }
 
 - (BOOL) menuShouldShowIcon
@@ -80,8 +79,7 @@ static void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
 
 - (NSRect) modifyRect: (NSRect)aRect
 	   forMenu: (NSMenu *)aMenu
-	   isHorizontal: (BOOL) horizontal;
-{
+	   isHorizontal: (BOOL) horizontal {
 	if (horizontal) {
 		aRect.origin.x += APP_MENU_ORIGIN_X_OFFSET;
 		aRect.size.width -= (APP_MENU_WIDTH_OFFSET + APP_MENU_ORIGIN_X_OFFSET);
@@ -90,8 +88,8 @@ static void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
 	return aRect;
 }
 
-- (float) titleWidthForMenuView: (NSMenuView *)aMenuView
-		  proposedWidth: (float)proposedWidth {
+- (CGFloat) proposedTitleWidth: (CGFloat)proposedWidth
+		   forMenuView: (NSMenuView *)aMenuView {
 	return proposedWidth + 4;
 }
 
@@ -141,12 +139,58 @@ static void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
 		 forMenuItem: (NSMenuItem *)menuItem
 {
  	NSString *appTitle = [NSBundle.mainBundle.localizedInfoDictionary objectForKey: @"ApplicationName"];
-	
+	//NSString *padding = @" ";
+
 	if ([title isEqualToString: appTitle]) {
 		return [title stringByAppendingString: @"   "];
 	} else {
 		return title;
+		//return [[padding stringByAppendingString: title] stringByAppendingString: padding];
 	}
 }
 
+- (NSButton *) standardWindowButton: (NSWindowButton)button
+		       forStyleMask: (NSUInteger) mask
+{
+	NSButton *result = [super standardWindowButton: button
+					  forStyleMask: mask];
+
+	if (result != nil) {
+		result.bordered = NO;
+	}
+
+	return result;
+}
+
+- (void) setFrameForCloseButton: (NSButton *)closeButton
+		       viewSize: (NSSize)viewSize
+{
+  NSSize buttonSize = [[closeButton image] size];
+  buttonSize = NSMakeSize(buttonSize.width + 3, buttonSize.height + 3);
+  
+  [closeButton setFrame: NSMakeRect(4,
+                   		   (viewSize.height - buttonSize.height) / 2,
+  		                    buttonSize.width, 
+				    buttonSize.height)];
+}
+
+- (NSRect) closeButtonFrameForBounds: (NSRect)bounds
+{
+  GSTheme *theme = [GSTheme theme];
+
+  return NSMakeRect([theme titlebarPaddingLeft], 
+		     bounds.size.height - [theme titlebarButtonSize] - [theme titlebarPaddingTop], 
+		    [theme titlebarButtonSize], 
+		    [theme titlebarButtonSize]);
+}
+
+- (NSRect) miniaturizeButtonFrameForBounds: (NSRect)bounds
+{
+  GSTheme *theme = [GSTheme theme];
+
+  return NSMakeRect([theme titlebarButtonSize] + [theme titlebarPaddingLeft] + 1, 
+		     bounds.size.height - [theme titlebarButtonSize] - [theme titlebarPaddingTop], 
+		    [theme titlebarButtonSize], 
+		    [theme titlebarButtonSize]);
+}
 @end

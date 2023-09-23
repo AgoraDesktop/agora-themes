@@ -45,7 +45,8 @@ Argentum_PRINCIPAL_CLASS = ArgentumTheme
 ADDITIONAL_OBJC_LIBS=
 
 Argentum_OBJC_FILES = \
-		Argentum.m
+		Argentum.m \
+		ArgentumWindowDecorator.m
 #
 # Resource files
 #
