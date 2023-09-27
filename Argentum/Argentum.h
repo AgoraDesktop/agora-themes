@@ -30,4 +30,6 @@
 
 @interface Argentum: GSTheme {}
 
+- (NSRect) zoomButtonFrameForBounds: (NSRect)bounds;
+
 @end

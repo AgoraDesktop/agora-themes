@@ -152,14 +152,45 @@ static void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
 - (NSButton *) standardWindowButton: (NSWindowButton)button
 		       forStyleMask: (NSUInteger) mask
 {
-	NSButton *result = [super standardWindowButton: button
-					  forStyleMask: mask];
+	NSButton *newButton = [[NSButton alloc] init];
 
-	if (result != nil) {
-		result.bordered = NO;
+	[newButton setRefusesFirstResponder: YES];
+	[newButton setButtonType: NSMomentaryChangeButton];
+	[newButton setImagePosition: NSImageOnly];
+	[newButton setBordered: NO];
+	[newButton setTag: button];
+
+	switch (button) {
+	case NSWindowCloseButton:
+		[newButton setImage: [NSImage imageNamed: @"common_Close"]];
+		[newButton setAlternateImage: [NSImage imageNamed: @"common_CloseH"]];
+		/* TODO: -performClose: should (but doesn't currently) highlight the
+		button, which is wrong here. When -performClose: is fixed, we'll need a
+		different method here. */
+		[newButton setAction: @selector(performClose:)];
+		break;
+	case NSWindowMiniaturizeButton:
+		[newButton setImage: [NSImage imageNamed: @"common_Miniaturize"]];
+		[newButton setAlternateImage: [NSImage imageNamed: @"common_MiniaturizeH"]];
+		[newButton setAction: @selector(miniaturize:)];
+		break;
+	case NSWindowZoomButton:
+		// FIXME
+		[newButton setImage: [NSImage imageNamed: @"common_Zoom"]];
+		[newButton setAlternateImage: [NSImage imageNamed: @"common_ZoomH"]];
+		[newButton setAction: @selector(zoom:)];
+		break;
+	case NSWindowToolbarButton:
+		// FIXME
+		[newButton setAction: @selector(toggleToolbarShown:)];
+		break;
+	case NSWindowDocumentIconButton:
+	default:
+		// FIXME
+		break;
 	}
 
-	return result;
+  	return AUTORELEASE(newButton);
 }
 
 - (void) setFrameForCloseButton: (NSButton *)closeButton
@@ -188,7 +219,17 @@ static void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
 {
   GSTheme *theme = [GSTheme theme];
 
-  return NSMakeRect([theme titlebarButtonSize] + [theme titlebarPaddingLeft] + 1, 
+  return NSMakeRect([theme titlebarButtonSize] + [theme titlebarPaddingLeft], 
+		     bounds.size.height - [theme titlebarButtonSize] - [theme titlebarPaddingTop], 
+		    [theme titlebarButtonSize], 
+		    [theme titlebarButtonSize]);
+}
+
+- (NSRect) zoomButtonFrameForBounds: (NSRect)bounds
+{
+  GSTheme *theme = [GSTheme theme];
+
+  return NSMakeRect(([theme titlebarButtonSize] * 2 + [theme titlebarPaddingLeft]), 
 		     bounds.size.height - [theme titlebarButtonSize] - [theme titlebarPaddingTop], 
 		    [theme titlebarButtonSize], 
 		    [theme titlebarButtonSize]);

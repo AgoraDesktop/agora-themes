@@ -26,9 +26,81 @@
 */ 
 
 #import <AppKit/NSImage.h>
+#import "Argentum.h"
 #import "ArgentumWindowDecorator.h"
 
 @implementation ArgentumWindowDecorationView
+
+- (id) initWithFrame: (NSRect)frame
+	      window: (NSWindow *)w
+{
+	if (self = [super initWithFrame: frame
+				 window: w]) {
+
+		self.hasZoomButton = NO;
+
+		NSUInteger styleMask;
+		styleMask = [w styleMask];
+  		
+
+		if (styleMask & NSResizableWindowMask)
+  		{
+			self.hasZoomButton = YES; 
+			self.zoomButton = [NSWindow standardWindowButton: NSWindowZoomButton 
+                              				    forStyleMask: styleMask];
+			[self.zoomButton setTarget: w];
+			[self addSubview: self.zoomButton];
+		}
+
+		[self updateRects];
+
+	}
+
+	return self;
+}
+
+- (void) updateRects
+{
+  GSTheme *theme = [GSTheme theme];
+
+  if (hasTitleBar)
+    {
+      CGFloat titleHeight = [theme titlebarHeight];
+
+      titleBarRect = NSMakeRect(0.0, [self bounds].size.height - titleHeight,
+	[self bounds].size.width, titleHeight);
+    }
+  if (hasResizeBar)
+    {
+      resizeBarRect = NSMakeRect(0.0, 0.0, [self bounds].size.width, [theme resizebarHeight]);
+    }
+  if (hasCloseButton)
+    {
+      NSRect closeButtonFrame = [[GSTheme theme] closeButtonFrameForBounds: [self bounds]];
+      [closeButton setFrame: closeButtonFrame];
+    }
+  else
+    {
+        closeButtonRect = NSZeroRect;
+    }
+
+  if (hasMiniaturizeButton)
+    {
+      NSRect miniaturizeButtonFrame = [[GSTheme theme] miniaturizeButtonFrameForBounds: [self bounds]];
+      [miniaturizeButton setFrame: miniaturizeButtonFrame];
+    }
+  else
+    {
+        miniaturizeButtonRect = NSZeroRect;
+    }
+
+  if (self.hasZoomButton) {
+      Argentum *theme = (Argentum *) [GSTheme theme];
+      NSRect zoomButtonFrame = [theme zoomButtonFrameForBounds: [self bounds]];
+      [self.zoomButton setFrame: zoomButtonFrame];
+  }
+
+}
 
 @end
 

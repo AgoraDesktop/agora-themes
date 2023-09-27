@@ -31,4 +31,8 @@
 
 @interface ArgentumWindowDecorationView: GSStandardWindowDecorationView {}
 
+@property BOOL hasZoomButton;
+
+@property (retain) NSButton *zoomButton;
+
 @end
