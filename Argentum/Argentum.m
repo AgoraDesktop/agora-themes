@@ -32,19 +32,6 @@
 #define APP_MENU_ORIGIN_X_OFFSET 43
 #define APP_MENU_WIDTH_OFFSET 288
 
-
-__attribute__((used))
-static void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
-        Method originalMethod = class_getInstanceMethod(class, originalSelector);
-        Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-
-        IMP originalImp = method_getImplementation(originalMethod);
-        IMP swizzledImp = method_getImplementation(swizzledMethod);
-
-        class_replaceMethod(class, swizzledSelector, originalImp, method_getTypeEncoding(originalMethod));
-        class_replaceMethod(class, originalSelector, swizzledImp, method_getTypeEncoding(swizzledMethod));
-}
-
 @implementation Argentum
 
 - (id<GSWindowDecorator>) windowDecorator {
@@ -162,27 +149,17 @@ static void swizzle(Class class, SEL originalSelector, SEL swizzledSelector) {
 
 	switch (button) {
 	case NSWindowCloseButton:
-		[newButton setImage: [NSImage imageNamed: @"common_Close"]];
-		[newButton setAlternateImage: [NSImage imageNamed: @"common_CloseH"]];
 		/* TODO: -performClose: should (but doesn't currently) highlight the
 		button, which is wrong here. When -performClose: is fixed, we'll need a
 		different method here. */
-		[newButton setAction: @selector(performClose:)];
 		break;
 	case NSWindowMiniaturizeButton:
-		[newButton setImage: [NSImage imageNamed: @"common_Miniaturize"]];
-		[newButton setAlternateImage: [NSImage imageNamed: @"common_MiniaturizeH"]];
-		[newButton setAction: @selector(miniaturize:)];
 		break;
 	case NSWindowZoomButton:
 		// FIXME
-		[newButton setImage: [NSImage imageNamed: @"common_Zoom"]];
-		[newButton setAlternateImage: [NSImage imageNamed: @"common_ZoomH"]];
-		[newButton setAction: @selector(zoom:)];
 		break;
 	case NSWindowToolbarButton:
 		// FIXME
-		[newButton setAction: @selector(toggleToolbarShown:)];
 		break;
 	case NSWindowDocumentIconButton:
 	default:

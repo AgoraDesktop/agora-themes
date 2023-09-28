@@ -34,5 +34,11 @@
 @property BOOL hasZoomButton;
 
 @property (retain) NSButton *zoomButton;
+@property (retain) NSButton *toggleToolbarButton;
+
+@property NSTrackingRectTag stoplightTrackingRect;
+
+@property BOOL windowWasAcceptingMouseEvents;
+@property BOOL mouseInView;
 
 @end

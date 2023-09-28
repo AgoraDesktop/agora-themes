@@ -47,6 +47,7 @@ ADDITIONAL_OBJC_LIBS=
 Argentum_OBJC_FILES = \
 		Argentum.m \
 		ArgentumWindowDecorator.m
+
 #
 # Resource files
 #

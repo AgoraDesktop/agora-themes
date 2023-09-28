@@ -26,81 +26,205 @@
 */ 
 
 #import <AppKit/NSImage.h>
+#import <AppKit/NSImageView.h>
+#import <GNUstepGUI/GSWindowDecorationView.h>
 #import "Argentum.h"
 #import "ArgentumWindowDecorator.h"
 
+@interface GSStandardWindowDecorationView (Private)
+
+- (void) updateRects;
+
+- (void) resetWindowButtons;
+
+- (void) close: (ArgentumWindowDecorationView *) sender;
+
+- (void) miniaturize: (ArgentumWindowDecorationView *) sender;
+
+- (void) zoom: (ArgentumWindowDecorationView *) sender;
+
+@end
+
 @implementation ArgentumWindowDecorationView
 
-- (id) initWithFrame: (NSRect)frame
-	      window: (NSWindow *)w
+- (id) initWithFrame: (NSRect) frame
+	      window: (NSWindow *) win
 {
-	if (self = [super initWithFrame: frame
-				 window: w]) {
+	self = [super initWithFrame: frame window: win]; 
 
-		self.hasZoomButton = NO;
-
-		NSUInteger styleMask;
-		styleMask = [w styleMask];
-  		
-
-		if (styleMask & NSResizableWindowMask)
-  		{
-			self.hasZoomButton = YES; 
-			self.zoomButton = [NSWindow standardWindowButton: NSWindowZoomButton 
-                              				    forStyleMask: styleMask];
-			[self.zoomButton setTarget: w];
-			[self addSubview: self.zoomButton];
-		}
-
-		[self updateRects];
-
+	if (self == nil) {
+		return nil;
 	}
+
+	if (closeButton == nil) {
+		closeButton = [NSWindow standardWindowButton: NSWindowCloseButton 
+						forStyleMask: win.styleMask];
+	}
+
+	if (win.styleMask & NSClosableWindowMask) {
+		hasCloseButton = YES;
+
+		closeButton.image = [NSImage imageNamed: @"common_Close"];
+		closeButton.alternateImage = [NSImage imageNamed: @"common_CloseH"];
+
+		closeButton.target = self;
+		closeButton.action = @selector(close:);
+	} else {
+		closeButton.image = [NSImage imageNamed: @"common_DisabledWindowButton"];
+		closeButton.alternateImage = [NSImage imageNamed: @"common_DisabledWindowButton"];
+		closeButton.action = NULL;
+	}
+	
+	[self addSubview: closeButton];
+
+	if (miniaturizeButton == nil) {
+		miniaturizeButton = [NSWindow standardWindowButton: NSWindowMiniaturizeButton 
+						      forStyleMask: win.styleMask];
+	}
+
+	if (win.styleMask & NSMiniaturizableWindowMask) {
+		hasMiniaturizeButton = YES;
+
+		miniaturizeButton.image = [NSImage imageNamed: @"common_Miniaturize"];
+		miniaturizeButton.alternateImage = [NSImage imageNamed: @"common_MiniaturizeH"];
+
+		miniaturizeButton.target = self;
+		miniaturizeButton.action = @selector(miniaturize:);
+	} else {
+		miniaturizeButton.image = [NSImage imageNamed: @"common_DisabledWindowButton"];
+		miniaturizeButton.image = [NSImage imageNamed: @"common_DisabledWindowButton"];
+	}
+	
+	[self addSubview: miniaturizeButton];
+
+	if (self.zoomButton == nil) {
+		self.zoomButton = [NSWindow standardWindowButton: NSWindowZoomButton 
+					            forStyleMask: win.styleMask];
+	}
+
+	if (win.styleMask & NSResizableWindowMask) {
+		hasResizeBar = YES;
+		self.hasZoomButton = YES;
+		
+		self.zoomButton.image = [NSImage imageNamed: @"common_Zoom"];
+		self.zoomButton.alternateImage = [NSImage imageNamed: @"common_ZoomH"];
+
+		self.zoomButton.target = self;
+		self.zoomButton.action = @selector(zoom:);
+	} else {
+		self.zoomButton.image = [NSImage imageNamed: @"common_DisabledWindowButton"];
+		self.zoomButton.image = [NSImage imageNamed: @"common_DisabledWindowButton"];
+	}
+
+	[self addSubview: self.zoomButton];
+
+	[self updateRects];
 
 	return self;
 }
 
 - (void) updateRects
 {
-  GSTheme *theme = [GSTheme theme];
+	Argentum *theme = (Argentum *) GSTheme.theme;
 
-  if (hasTitleBar)
-    {
-      CGFloat titleHeight = [theme titlebarHeight];
+	[super updateRects];
 
-      titleBarRect = NSMakeRect(0.0, [self bounds].size.height - titleHeight,
-	[self bounds].size.width, titleHeight);
-    }
-  if (hasResizeBar)
-    {
-      resizeBarRect = NSMakeRect(0.0, 0.0, [self bounds].size.width, [theme resizebarHeight]);
-    }
-  if (hasCloseButton)
-    {
-      NSRect closeButtonFrame = [[GSTheme theme] closeButtonFrameForBounds: [self bounds]];
-      [closeButton setFrame: closeButtonFrame];
-    }
-  else
-    {
-        closeButtonRect = NSZeroRect;
-    }
+	if (self.hasZoomButton) {
+		self.zoomButton.frame = [theme zoomButtonFrameForBounds: self.bounds];
+	}
+}
 
-  if (hasMiniaturizeButton)
-    {
-      NSRect miniaturizeButtonFrame = [[GSTheme theme] miniaturizeButtonFrameForBounds: [self bounds]];
-      [miniaturizeButton setFrame: miniaturizeButtonFrame];
-    }
-  else
-    {
-        miniaturizeButtonRect = NSZeroRect;
-    }
+- (void) viewWillMoveToWindow: (NSWindow *) newWindow {
+	[self clearTrackingRects];
+}
 
-  if (self.hasZoomButton) {
-      Argentum *theme = (Argentum *) [GSTheme theme];
-      NSRect zoomButtonFrame = [theme zoomButtonFrameForBounds: [self bounds]];
-      [self.zoomButton setFrame: zoomButtonFrame];
-  }
+- (void)resetCursorRects {
+	[super resetCursorRects];
+	[self clearTrackingRects];
+	[self setTrackingRects];
+}
+
+- (void) clearTrackingRects {
+	if ( [self window] && self.stoplightTrackingRect ) {
+		[self removeTrackingRect: self.stoplightTrackingRect];
+	}
+}
+
+- (void) setTrackingRects {
+	NSRect stoplightRect = NSMakeRect(closeButton.frame.origin.x - 4,
+				          closeButton.frame.origin.y -4,
+					  self.zoomButton.frame.origin.x + self.zoomButton.frame.size.width + 4,
+					  self.zoomButton.frame.origin.y + self.zoomButton.frame.size.height + 4);
+	self.stoplightTrackingRect = [self addTrackingRect: stoplightRect
+             					     owner: self
+                        			  userData: nil 
+                    			      assumeInside: NO];
+}
+
+- (void) viewDidMoveToWindow {
+	[self setTrackingRects];
+}
+
+- (void) mouseEntered: (NSEvent *) theEvent
+{
+	self.mouseInView = YES;
+	self.windowWasAcceptingMouseEvents = self.window.acceptsMouseMovedEvents;
+	self.window.acceptsMouseMovedEvents = YES;
+
+	[self highlightWindowButtons];
+
+	[self displayIfNeeded];
+}
+
+- (void) mouseExited: (NSEvent *) theEvent {
+	[self resetWindowButtons];
+
+	self.mouseInView = NO;
+   	self.window.acceptsMouseMovedEvents = self.windowWasAcceptingMouseEvents;
+	[self setNeedsDisplay:YES];
+}
+
+- (void) resetWindowButtons {
+	closeButton.image = [NSImage imageNamed: @"common_Close"];
+	miniaturizeButton.image = [NSImage imageNamed: @"common_Miniaturize"];
+	self.zoomButton.image = [NSImage imageNamed: @"common_Zoom"];
+}
+
+- (void) highlightWindowButtons {
+	closeButton.image = [NSImage imageNamed: @"common_CloseH"];
+	miniaturizeButton.image = [NSImage imageNamed: @"common_MiniaturizeH"];
+	self.zoomButton.image = [NSImage imageNamed: @"common_ZoomH"];
+}
+
+- (void) close: (ArgentumWindowDecorationView *) sender {
+	[window performClose: self];
+	
+	[self resetWindowButtons];
+	
+	self.needsDisplay = YES;
+	
+	[self displayIfNeeded];
+}
+
+- (void) miniaturize: (ArgentumWindowDecorationView *) sender {
+	[window performMiniaturize: self];
+	
+	[self resetWindowButtons];
+	
+	self.needsDisplay = YES;
+	
+	[self displayIfNeeded];
 
 }
 
-@end
+- (void) zoom: (ArgentumWindowDecorationView *) sender {
+	[window performZoom: self];
+	
+	[self resetWindowButtons];
+	
+	self.needsDisplay = YES;
+	
+	[self displayIfNeeded];
+}
 
+@end
