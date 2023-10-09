@@ -35,7 +35,7 @@
 @implementation Argentum
 
 - (id<GSWindowDecorator>) windowDecorator {
-	return ArgentumWindowDecorationView.self;
+	return [ArgentumWindowDecorationView self];
 }
 
 - (BOOL) menuShouldShowIcon
