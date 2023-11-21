@@ -32,4 +32,6 @@
 
 - (NSRect) zoomButtonFrameForBounds: (NSRect)bounds;
 
+- (NSRect) toolbarButtonFrameForBounds: (NSRect)bound;
+
 @end

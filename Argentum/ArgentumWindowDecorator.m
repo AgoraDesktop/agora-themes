@@ -92,7 +92,7 @@
 		miniaturizeButton.action = @selector(miniaturize:);
 	} else {
 		miniaturizeButton.image = [NSImage imageNamed: @"common_DisabledWindowButton"];
-		miniaturizeButton.image = [NSImage imageNamed: @"common_DisabledWindowButton"];
+		miniaturizeButton.alternateImage = [NSImage imageNamed: @"common_DisabledWindowButton"];
 	}
 	
 	[self addSubview: miniaturizeButton];
@@ -113,14 +113,31 @@
 		self.zoomButton.action = @selector(zoom:);
 	} else {
 		self.zoomButton.image = [NSImage imageNamed: @"common_DisabledWindowButton"];
-		self.zoomButton.image = [NSImage imageNamed: @"common_DisabledWindowButton"];
+		self.zoomButton.alternateImage = [NSImage imageNamed: @"common_DisabledWindowButton"];
 	}
+
+	self.toolbarButton = [NSWindow standardWindowButton: NSWindowToolbarButton 
+					       forStyleMask: win.styleMask];
+
+	self.toolbarButton.image = [NSImage imageNamed: @"common_DisabledWindowButton"];
+	self.toolbarButton.alternateImage = [NSImage imageNamed: @"common_DisabledWindowButton"];
+	self.toolbarButton.target = win;
+	self.toolbarButton.action = @selector(toggleToolbarShown:);
+	self.toolbarButton.hidden = YES;
+	
+	[self addSubview: self.toolbarButton];
 
 	[self addSubview: self.zoomButton];
 
 	[self updateRects];
 
 	return self;
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
+	self.toolbarButton.hidden = self.window.toolbar == nil ? YES : NO;
+
+	[super drawRect: dirtyRect];
 }
 
 - (void) updateRects
@@ -132,6 +149,8 @@
 	if (self.hasZoomButton) {
 		self.zoomButton.frame = [theme zoomButtonFrameForBounds: self.bounds];
 	}
+
+	self.toolbarButton.frame = [theme toolbarButtonFrameForBounds: self.bounds];
 }
 
 - (void) viewWillMoveToWindow: (NSWindow *) newWindow {
@@ -163,6 +182,10 @@
 
 - (void) viewDidMoveToWindow {
 	[self setTrackingRects];
+
+	if (window.toolbar != nil) {
+		self.toolbarButton.hidden = NO;
+	}
 }
 
 - (void) mouseEntered: (NSEvent *) theEvent
@@ -225,6 +248,21 @@
 	self.needsDisplay = YES;
 	
 	[self displayIfNeeded];
+}
+
+- (void) mouseDown: (NSEvent *) event
+{
+	NSPoint p = [self convertPoint: [event locationInWindow] fromView: nil];
+
+	if ([self pointInTitleBarRect: p] && 
+	    event.clickCount == 2 && 
+	    (window.styleMask & NSResizableWindowMask)) {
+		[self zoom: self];
+	
+		return;
+	}
+
+	[super mouseDown: event];
 }
 
 @end

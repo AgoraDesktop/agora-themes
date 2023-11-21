@@ -34,7 +34,7 @@
 @property BOOL hasZoomButton;
 
 @property (retain) NSButton *zoomButton;
-@property (retain) NSButton *toggleToolbarButton;
+@property (retain) NSButton *toolbarButton;
 
 @property NSTrackingRectTag stoplightTrackingRect;
 

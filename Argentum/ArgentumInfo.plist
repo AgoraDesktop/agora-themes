@@ -66,18 +66,15 @@
 			FileName = "Blank.9.png";
 		};
 		GSWindowBackground = {
-			FileName = "WindowBackground.png";
-			HorizontalDivision = 20;
-			VerticalDivision = 20;
+			FileName = "WindowBackground.9.png";
+			FillStyle = Repeat; 
 		};
 		GSWindowBackgroundSelected = {
-			FileName = "WindowBackgroundSelected.png";
-			FillStyle = ScaleAll;
-			HorizontalDivision = 20;
-			VerticalDivision = 20;
+			FileName = "WindowBackground.9.png";
+			FillStyle = Repeat;
 		};
 		GSWindowResizeBar = {
-			FileName = "WindowResize.9.png";
+			FileName = "ResizeBar.9.png";
 		};
 		GSWindowTitleBar = {
 			FileName = "Titlebar.9.png";

@@ -211,4 +211,35 @@
 		    [theme titlebarButtonSize], 
 		    [theme titlebarButtonSize]);
 }
+
+- (NSRect) toolbarButtonFrameForBounds: (NSRect)bounds
+{
+	GSTheme *theme = [GSTheme theme];
+
+	return NSMakeRect(bounds.size.width - [theme titlebarButtonSize] - [theme titlebarPaddingRight],
+			 bounds.size.height - [theme titlebarButtonSize] - [theme titlebarPaddingTop],
+			 [theme titlebarButtonSize],
+			 [theme titlebarButtonSize]);
+}
+
+- (void) organizeMenu: (NSMenu *)menu
+	 isHorizontal: (BOOL)horizontal {
+	// Do nothing.
+}
+
+- (void) drawWindowBackground: (NSRect) frame view: (NSView*) view
+{
+  GSDrawTiles *tiles = [self tilesNamed: @"GSWindowBackground" state: GSThemeNormalState];
+
+  if (tiles == nil)
+    {    
+      NSDottedFrameRect(frame);
+    }
+  else
+    {
+      [self fillRect: frame
+           withTiles: tiles];
+    }
+}
+
 @end
